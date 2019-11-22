@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 import unittest
 
 class NewVisitorTest(unittest.TestCase): #unittest.TestCase를 상속해서 클래스 형태로 만든다
@@ -24,6 +25,29 @@ class NewVisitorTest(unittest.TestCase): #unittest.TestCase를 상속해서 클�
         self.browser.get('http://localhost:8000')
         #assert를 대신해서 사용(assertEqual, assertTrue, assertFalse, assertIn)
         self.assertIn('TDD', self.browser.title)
+
+        header_text = self.browser.find_element_by_tag_name('h1').text
+        self.assertIn('TO-DO', header_text)
+
+        inputBox = self.browser.find_element_by_id('id_new_item')
+        self.assertEqual(
+            #에러가 날 경우가 있으니 get_attribute 확인해볼것
+            inputBox.get_attribute('placeholder'),
+            '작업 아이템 입력'
+        )
+        # '테스트 확인'라고 텍스트 상자에 입력한다
+        inputBox.send_keys('테스트 확인')
+        
+        # 엔터키를 치면 페이지가 갱신되고 작업 목록에
+        # '1: 테스트 확인' 아이템이 추가된다.
+        inputBox.send_keys(Keys.ENTER)
+
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertTrue(
+            any(row.text == '1: 테스트 확인' for row in rows),
+        )
+
         #강제적 테스트 실패 발생시켜 에러 메시지 출력
         self.fail('Finish the test!')
 
