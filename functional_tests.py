@@ -23,7 +23,7 @@ class NewVisitorTest(unittest.TestCase): #unittest.TestCase를 상속해서 클�
     def test_can_start(self):
         self.browser.get('http://localhost:8000')
         #assert를 대신해서 사용(assertEqual, assertTrue, assertFalse, assertIn)
-        self.assertIn('Django', self.browser.title)
+        self.assertIn('TDD', self.browser.title)
         #강제적 테스트 실패 발생시켜 에러 메시지 출력
         self.fail('Finish the test!')
 
